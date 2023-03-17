@@ -9,7 +9,10 @@ import importlib
 os.system('title Watson')
 
 def clear():
-    os.system("cls")
+    try:
+        os.system("cls")
+    except:
+        os.system("clear")
 
 clear()
 system('mode con: cols=100 lines=30')
@@ -24,7 +27,6 @@ def homeban():
     print(f"Type Help To See All Commands".center(os.get_terminal_size().columns))
     print("────────────────────────────────────────────────────────────────────────────────────────────────────")
     print("")
-homeban()
 
 def banner():
     print("")
@@ -39,8 +41,39 @@ def banner():
     
 
     
+homeban()
+
+def delete_module(modname, paranoid=None):
+    from sys import modules
+    try:
+        thismod = modules[modname]
+    except KeyError:
+        raise ValueError(modname)
+    these_symbols = dir(thismod)
+    if paranoid:
+        try:
+            paranoid[:]  # sequence support
+        except:
+            raise ValueError('must supply a finite list for paranoid')
+        else:
+            these_symbols = paranoid[:]
+    del modules[modname]
+    for mod in modules.values():
+        try:
+            delattr(mod, modname)
+        except AttributeError:
+            pass
+        if paranoid:
+            for symbol in these_symbols:
+                if symbol[:2] == '__':  # ignore special symbols
+                    continue
+                try:
+                    delattr(mod, symbol)
+                except AttributeError:
+                    pass
 
 while True:
+    
     maininput = input(f'[{Fore.RED}Watson{Fore.RESET}]~: ')
     if maininput == 'HELP' or maininput == 'help' or maininput == '?':
         print(f"""Commands:\n=========\nclear""")
@@ -55,5 +88,6 @@ while True:
     else:
         try:
             importlib.import_module("commands."+maininput, package=None)
+            delete_module('commands.' +maininput)
         except ImportError:
             print("Command Not Found In Modules!")

@@ -9,6 +9,9 @@ A Osint Mini Suite For Beginner And Advanced Users
 - Email Investigator
 - Custom Command Handler
 - IP Lookup
+- Genderize (Guess Someones Gender With Probability)
+- Bin Checking
+- SnusBase Integration
 ## Setup
 To Setup Watson Do The Following
 
@@ -26,6 +29,8 @@ import json
 with open("config.json") as f:
     config = json.load(f)
     foo = config.get('foo')
+
+print(foo) #Will print what ever is in config under foo
 ```
 ## Authors
 
